@@ -99,9 +99,52 @@ CREATE TABLE Preference (
 );
 
 -- Add sample data. 
-INSERT INTO fav_colors
-  (name, color)
+INSERT INTO Hotel (region)
 VALUES
-  ('dev', 'blue'),
-  ('pro', 'yellow'),
-  ('junior', 'red');
+  ('Boston'),
+  ('New York'),
+  ('Los Angeles');
+
+INSERT INTO Employee (phoneNumber, weeklyHours, firstName, lastName, hourlyPay, role, hotelId) 
+VALUES 
+  ('435-345-5555', 40, 'John', 'Smith', 16.00, 'Manager', 1),
+  ('123-321-3333', 35, 'Alex', 'Johnson', 14.00, 'front desk', 2),
+  ('564-456-6666', 40, 'Susan', 'Marie', 13.00, 'cleaner', 3);
+
+INSERT INTO Shift (timeOff, employeeId, dateTimeEnd, dateTimeStart)
+VALUES 
+  (FALSE, 1, '2022-11-26 09:00:00', '2022-11-26 17:00:00'),
+  (FALSE, 2, '2022-11-26 13:30:00', '2022-11-26 15:00:00'),
+  (FALSE, 2, '2022-11-27 14:00:00', '2022-11-27 16:00:00');
+
+INSERT INTO Supplies (name, unitsInStock, hotelId) 
+  VALUES 
+    ('Shampoo', 100, 1),
+    ('Soap', 150, 1);
+
+INSERT INTO Room (roomNum, cleaned, occupancy, hotelId, yearlyMaintenance, roomPrice) 
+  VALUES 
+    (101, FALSE, 2, 1, 500.00, 120.00),
+    (102, TRUE, 3, 1, 450.00, 150.00);
+
+INSERT INTO Customer (phoneNumber, firstName, lastName) 
+  VALUES 
+  ('345-678-9999', 'Alice', 'Smith'),
+  ('456-789-0000', 'Bob', 'Williams');
+
+INSERT INTO Booking (roomNum, hotelId, customerId, occupancyStartDate, occupancyEndDate) 
+  VALUES 
+    (101, 1, 1, '2023-11-25 14:00:00', '2023-11-27 11:00:00'),
+    (102, 1, 2, '2023-11-26 15:00:00', '2023-11-28 10:00:00');
+
+INSERT INTO Preference (customerId, preference) 
+  VALUES 
+  (1, 'High floor, away from elevator'),
+  (2, 'Close to gym, extra pillows');
+
+
+
+
+  
+
+
