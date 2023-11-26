@@ -37,7 +37,7 @@ CREATE TABLE Employee (
     role VARCHAR(10) NOT NULL,
     hotelId INTEGER NOT NULL,
     FOREIGN KEY (hotelId) REFERENCES Hotel (hotelId)
-         ON UPDATE restrict ON DELETE restrict
+         ON UPDATE cascade ON DELETE restrict
 );
 
 CREATE TABLE Shift (
@@ -46,7 +46,7 @@ CREATE TABLE Shift (
     dateTimeEnd DATETIME,
     dateTimeStart DATETIME PRIMARY KEY,
     FOREIGN KEY (employeeId) REFERENCES Employee (employeeId)
-        ON UPDATE restrict ON DELETE restrict
+        ON UPDATE cascade ON DELETE restrict
 );
 
 CREATE TABLE Supplies (
@@ -55,7 +55,7 @@ CREATE TABLE Supplies (
     unitsInStock INTEGER DEFAULT 0,
     hotelId INTEGER,
     FOREIGN KEY (hotelId) REFERENCES Hotel (hotelId)
-         ON UPDATE restrict ON DELETE restrict
+         ON UPDATE cascade ON DELETE restrict
 );
 
 CREATE TABLE Room (
@@ -66,7 +66,7 @@ CREATE TABLE Room (
     yearlyMaintenance DECIMAL(4, 2),
     roomPrice DECIMAL(4, 2),
     FOREIGN KEY (hotelId) REFERENCES Hotel (hotelId)
-         ON UPDATE restrict ON DELETE restrict
+         ON UPDATE cascade ON DELETE restrict
 );
 
 CREATE TABLE Customer (
@@ -86,16 +86,16 @@ CREATE TABLE Booking (
     FOREIGN KEY (roomNum) REFERENCES Room (roomNum)
         ON UPDATE cascade,
     FOREIGN KEY (hotelId) REFERENCES Room (hotelId)
-        ON UPDATE restrict ON DELETE restrict ,
+        ON UPDATE cascade ON DELETE restrict ,
     FOREIGN KEY (customerId) REFERENCES Customer (customerId)
-        ON UPDATE restrict ON DELETE restrict
+        ON UPDATE cascade ON DELETE restrict
 );
 
 CREATE TABLE Preference (
     customerId INTEGER,
     preference VARCHAR(500) PRIMARY KEY,
     FOREIGN KEY (customerId) REFERENCES Customer (customerId)
-        ON UPDATE restrict ON DELETE restrict
+        ON UPDATE cascade ON DELETE restrict
 );
 
 -- Add sample data. 
