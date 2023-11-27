@@ -1,24 +1,25 @@
--- This file is to bootstrap a database for the CS3200 project. 
+-- This file is to bootstrap a database for the CS3200 project.
 
 -- Create a new database.  You can change the name later.  You'll
--- need this name in the FLASK API file(s),  the AppSmith 
+-- need this name in the FLASK API file(s),  the AppSmith
 -- data source creation.
 create database HotelFranchiseDB;
 
--- Via the Docker Compose file, a special user called webapp will 
--- be created in MySQL. We are going to grant that user 
--- all privilages to the new database we just created. 
--- TODO: If you changed the name of the database above, you need 
+-- Via the Docker Compose file, a special user called webapp will
+-- be created in MySQL. We are going to grant that user
+-- all privileges to the new database we just created.
+-- TODO: If you changed the name of the database above, you need
 -- to change it here too.
+create user if not exists 'webapp'@'%';
 grant all privileges on HotelFranchiseDB.* to 'webapp'@'%';
 flush privileges;
 
 -- Move into the database we just created.
 -- TODO: If you changed the name of the database above, you need to
--- change it here too. 
+-- change it here too.
 use HotelFranchiseDB;
 
--- Put your DDL 
+-- Put your DDL
 CREATE TABLE Hotel (
   hotelId INTEGER PRIMARY KEY AUTO_INCREMENT,
   region VARCHAR(10)
@@ -33,8 +34,8 @@ CREATE TABLE Employee (
     requestedDaysOffEnd DATETIME,
     firstName VARCHAR(10) NOT NULL,
     lastName VARCHAR(10) NOT NULL,
-    hourlyPay DECIMAL(3,2) NOT NULL,
-    role VARCHAR(10) NOT NULL,
+    hourlyPay DECIMAL(4,2) NOT NULL,
+    role VARCHAR(20) NOT NULL,
     hotelId INTEGER NOT NULL,
     FOREIGN KEY (hotelId) REFERENCES Hotel (hotelId)
          ON UPDATE cascade ON DELETE restrict
@@ -42,9 +43,10 @@ CREATE TABLE Employee (
 
 CREATE TABLE Shift (
     timeOff BOOLEAN,
-    employeeId INTEGER PRIMARY KEY,
+    employeeId INTEGER,
     dateTimeEnd DATETIME,
-    dateTimeStart DATETIME PRIMARY KEY,
+    dateTimeStart DATETIME,
+    PRIMARY KEY(employeeId, dateTimeStart),
     FOREIGN KEY (employeeId) REFERENCES Employee (employeeId)
         ON UPDATE cascade ON DELETE restrict
 );
@@ -59,12 +61,13 @@ CREATE TABLE Supplies (
 );
 
 CREATE TABLE Room (
-    roomNum INTEGER PRIMARY KEY,
+    roomNum INTEGER,
     cleaned BOOL DEFAULT 0,
     occupancy INTEGER NOT NULL ,
-    hotelId INTEGER PRIMARY KEY,
-    yearlyMaintenance DECIMAL(4, 2),
-    roomPrice DECIMAL(4, 2),
+    hotelId INTEGER,
+    yearlyMaintenance DECIMAL(6, 2),
+    roomPrice DECIMAL(6, 2),
+    PRIMARY KEY (roomNum, hotelId),
     FOREIGN KEY (hotelId) REFERENCES Hotel (hotelId)
          ON UPDATE cascade ON DELETE restrict
 );
@@ -78,11 +81,12 @@ CREATE TABLE Customer (
 );
 
 CREATE TABLE Booking (
-    roomNum INTEGER PRIMARY KEY,
-    hotelId INTEGER PRIMARY KEY,
-    customerId INTEGER PRIMARY KEY,
+    roomNum INTEGER,
+    hotelId INTEGER,
+    customerId INTEGER,
     occupancyStartDate DATETIME,
     occupancyEndDate DATETIME,
+    PRIMARY KEY (roomNum, hotelId, customerId),
     FOREIGN KEY (roomNum) REFERENCES Room (roomNum)
         ON UPDATE cascade,
     FOREIGN KEY (hotelId) REFERENCES Room (hotelId)
@@ -98,24 +102,24 @@ CREATE TABLE Preference (
         ON UPDATE cascade ON DELETE restrict
 );
 
--- Add sample data. 
+-- Add sample data.
 INSERT INTO Hotel (region)
 VALUES
   ('Boston'),
   ('New York'),
-  ('Los Angeles'),
+  ('LA'),
   ('Seattle'),
-  ('San Francisco), 
+  ('SF'),
   ('Chicago'),
-  ('Santa Clara'),
+  ('Denver'),
   ('Portland'),
   ('Orlando'),
   ('Miami'),
   ('Dallas'),
   ('Austin');
 
-INSERT INTO Employee (phoneNumber, weeklyHours, firstName, lastName, hourlyPay, role, hotelId) 
-VALUES 
+INSERT INTO Employee (phoneNumber, weeklyHours, firstName, lastName, hourlyPay, role, hotelId)
+VALUES
   ('435-345-5555', 40, 'John', 'Smith', 16.00, 'Manager', 1),
   ('123-321-3333', 35, 'Alex', 'Johnson', 14.00, 'Front Desk', 2),
   ('564-456-6666', 40, 'Susan', 'Marie', 13.00, 'Cleaner', 3),
@@ -128,7 +132,7 @@ VALUES
   ('888-999-1111', 36, 'Olivia', 'Garcia', 14.00, 'Housekeeping', 6);
 
 INSERT INTO Shift (timeOff, employeeId, dateTimeEnd, dateTimeStart)
-VALUES 
+VALUES
   (FALSE, 1, '2022-11-26 09:00:00', '2022-11-26 17:00:00'),
   (FALSE, 2, '2022-11-26 13:30:00', '2022-11-26 15:00:00'),
   (FALSE, 2, '2022-11-27 14:00:00', '2022-11-27 16:00:00'),
@@ -140,8 +144,8 @@ VALUES
   (FALSE, 8, '2022-12-03 14:00:00', '2022-12-03 22:00:00'),
   (TRUE, 9, '2022-12-04 09:00:00', '2022-12-04 17:00:00');
 
-INSERT INTO Supplies (name, unitsInStock, hotelId) 
-  VALUES 
+INSERT INTO Supplies (name, unitsInStock, hotelId)
+  VALUES
     ('Shampoo', 100, 1),
     ('Soap', 150, 1),
     ('Toilet paper', 120, 2),
@@ -153,8 +157,8 @@ INSERT INTO Supplies (name, unitsInStock, hotelId)
     ('Cups', 220, 5),
     ('Plates', 100, 5);
 
-INSERT INTO Room (roomNum, cleaned, occupancy, hotelId, yearlyMaintenance, roomPrice) 
-  VALUES 
+INSERT INTO Room (roomNum, cleaned, occupancy, hotelId, yearlyMaintenance, roomPrice)
+  VALUES
     (101, FALSE, 2, 1, 500.00, 120.00),
     (102, TRUE, 3, 1, 450.00, 150.00),
     (103, TRUE, 2, 2, 480.00, 130.00),
@@ -166,8 +170,8 @@ INSERT INTO Room (roomNum, cleaned, occupancy, hotelId, yearlyMaintenance, roomP
     (109, TRUE, 2, 7, 530.00, 125.00),
     (110, TRUE, 2, 8, 460.00, 165.00);
 
-INSERT INTO Customer (phoneNumber, firstName, lastName) 
-  VALUES 
+INSERT INTO Customer (phoneNumber, firstName, lastName)
+  VALUES
   ('345-678-9999', 'Alice', 'Smith'),
   ('456-789-0000', 'Bob', 'Williams'),
   ('111-222-3333', 'Emma', 'Johnson'),
@@ -179,8 +183,8 @@ INSERT INTO Customer (phoneNumber, firstName, lastName)
   ('123-456-7890', 'Ava', 'Hernandez'),
   ('987-654-3210', 'Alexander', 'Gonzalez');
 
-INSERT INTO Booking (roomNum, hotelId, customerId, occupancyStartDate, occupancyEndDate) 
-  VALUES 
+INSERT INTO Booking (roomNum, hotelId, customerId, occupancyStartDate, occupancyEndDate)
+  VALUES
     (101, 1, 1, '2023-11-25 14:00:00', '2023-11-27 11:00:00'),
     (102, 1, 2, '2023-11-26 15:00:00', '2023-11-28 10:00:00'),
     (103, 2, 3, '2023-11-27 10:00:00', '2023-11-29 09:00:00'),
@@ -192,8 +196,8 @@ INSERT INTO Booking (roomNum, hotelId, customerId, occupancyStartDate, occupancy
     (109, 7, 9, '2023-12-03 10:00:00', '2023-12-05 08:00:00'),
     (110, 8, 10, '2023-12-04 15:00:00', '2023-12-06 12:00:00');
 
-INSERT INTO Preference (customerId, preference) 
-  VALUES 
+INSERT INTO Preference (customerId, preference)
+  VALUES
   (1, 'High floor, away from elevator'),
   (2, 'Close to gym, extra pillows'),
   (3, 'Ocean view, king-sized bed'),
@@ -204,10 +208,3 @@ INSERT INTO Preference (customerId, preference)
   (8, 'Early check-in, late check-out'),
   (9, 'Accessible room, bathroom grab bars'),
   (10, 'Non-smoking room, pet-friendly');
-
-
-
-
-  
-
-
