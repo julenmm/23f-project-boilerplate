@@ -32,7 +32,7 @@ def create_app():
     def welcome():
         return "<h1>Welcome to the 3200 boilerplate app</h1>"
 
-    # Import the various Beluprint Objects
+    # Import the various Blueprint Objects
     from src.front_desk_agent.front_desk_agent  import front_desk_agent
     from src.hotel_manager.hotel_manager import hotel_manager
     from src.housekeeping_supervisor.housekeeping_supervisor  import housekeeping_supervisor
