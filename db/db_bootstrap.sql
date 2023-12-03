@@ -1,4 +1,7 @@
 -- This file is to bootstrap a database for the CS3200 project.
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 -- Create a new database.  You can change the name later.  You'll
 -- need this name in the FLASK API file(s),  the AppSmith
@@ -10,16 +13,16 @@ create database if not exists HotelFranchiseDB;
 -- all privileges to the new database we just created.
 -- TODO: If you changed the name of the database above, you need
 -- to change it here too.
-create user if not exists 'webapp'@'%';
-grant all privileges on HotelFranchiseDB.* to 'webapp'@'%';
--- flush privileges;
+CREATE USER IF NOT EXISTS 'webapp'@'%' IDENTIFIED BY 'badpassword';
+GRANT ALL PRIVILEGES ON HotelFranchiseDB.* TO 'webapp'@'%';
+FLUSH PRIVILEGES;
 
 -- Move into the database we just created.
 -- TODO: If you changed the name of the database above, you need to
 -- change it here too.
 use HotelFranchiseDB;
 
--- Put your DDL
+-- DDL
 CREATE TABLE Hotel (
   hotelId INTEGER PRIMARY KEY AUTO_INCREMENT,
   region VARCHAR(30)
