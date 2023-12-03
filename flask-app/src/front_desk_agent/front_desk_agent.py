@@ -7,7 +7,7 @@ front_desk_agent = Blueprint('front_desk_agent', __name__)
 
 # Update customer preferences with a particular userID
 @front_desk_agent.route('/Customer/<customerId>', methods=['PUT'])
-def put_customer_pref(userID):
+def put_customer_pref(customerId):
     try:
         pref = request.json  # Get the new preferences from the request body
         cursor = db.get_db().cursor()
