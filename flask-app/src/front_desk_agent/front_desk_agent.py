@@ -17,11 +17,16 @@ def get_customers():
         json_data.append(dict(zip(row_headers, row)))
     return jsonify(json_data)
 
-# Add customer preferences for a particular userID
-@front_desk_agent.route('/Preference/<customerId>', methods=['POST'])
-def post_customer_pref(customerId):
+@front_desk_agent.route('/Preference/', methods=['POST'])
+def post_customer_pref():
     try:
-        pref = request.json  # Get the new preferences from the request body
+        data = request.get_json()  # Get JSON data from the request body
+        if not data or 'customerId' not in data or 'preference' not in data:
+            return jsonify({"error": "Required data not provided"}), 400
+
+        customerId = data['customerId']  # Extract customerId from JSON
+        pref = data['preference']  # Extract preference from JSON
+
         cursor = db.get_db().cursor()
 
         # Check if preferences already exist for the customer
@@ -30,29 +35,31 @@ def post_customer_pref(customerId):
         existing_pref = cursor.fetchone()
 
         if existing_pref:
-            # Preferences already exist, you can choose to update or return a message
-            return jsonify({"message": "Preferences already exist for this customer."}), 409
+            # Preferences already exist, update them
+            update_query = "UPDATE Preference SET preference = %s WHERE customerId = %s;"
+            cursor.execute(update_query, (pref, customerId))
+            db.get_db().commit()  # Commit the transaction
+            message = "Preferences updated successfully."
         else:
             # Insert the new preferences into the database
-            insert_query = "INSERT INTO Preference (preferences, customerId) VALUES (%s, %s);"
-            cursor.execute(insert_query, (json.dumps(pref), customerId))
+            insert_query = "INSERT INTO Preference (preference, customerId) VALUES (%s, %s);"
+            cursor.execute(insert_query, (pref, customerId))
             db.get_db().commit()  # Commit the transaction
+            message = "Preferences added successfully."
 
-            # Fetch the newly added preferences to return in the response
-            cursor.execute("SELECT * FROM Preference WHERE customerId = %s;", (customerId,))
-            row_headers = [x[0] for x in cursor.description]
-            theData = cursor.fetchall()
-            json_data = [dict(zip(row_headers, row)) for row in theData]
+        # Fetch the updated preferences
+        cursor.execute("SELECT * FROM Preference WHERE customerId = %s;", (customerId,))
+        row_headers = [x[0] for x in cursor.description]
+        theData = cursor.fetchall()
+        json_data = [dict(zip(row_headers, row)) for row in theData]
 
-            response = make_response(jsonify(json_data))
-            response.status_code = 201
-            response.mimetype = 'application/json'
-            return response
+        response = make_response(jsonify({"message": message, "data": json_data}), 200)
+        response.mimetype = 'application/json'
+        return response
 
     except Exception as e:
         db.get_db().rollback()  # Rollback in case of any error
         return jsonify({"error": str(e)}), 500
-
     
 @front_desk_agent.route('/bookings', methods=['POST'])
 def add_booking():
