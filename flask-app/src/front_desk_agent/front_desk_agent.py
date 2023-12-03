@@ -6,20 +6,20 @@ from src import db
 front_desk_agent = Blueprint('front_desk_agent', __name__)
 
 # Update customer preferences with a particular userID
-@front_desk_agent.route('/Customer/<customerId>', methods=['PUT'])
+@front_desk_agent.route('/Preference/<customerId>', methods=['PUT'])
 def put_customer_pref(customerId):
     try:
         pref = request.json  # Get the new preferences from the request body
         cursor = db.get_db().cursor()
 
         # Update the customer's preferences in the database
-        update_query = "UPDATE Customers SET preferences = %s WHERE customerId = %s"
+        update_query = "UPDATE Preference SET preferences = %s WHERE customerId = %s"
         cursor.execute(update_query, (json.dumps(pref), customerId))
 
         db.get_db().commit()  # Commit the transaction
 
         # Fetch the updated customer data to return in the response
-        cursor.execute("SELECT * FROM Customers WHERE customerId = %s", (customerId,))
+        cursor.execute("SELECT * FROM Preference WHERE customerId = %s", (customerId,))
         row_headers = [x[0] for x in cursor.description]
         theData = cursor.fetchall()
         json_data = [dict(zip(row_headers, row)) for row in theData]
