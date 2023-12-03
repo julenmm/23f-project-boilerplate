@@ -3,41 +3,10 @@ import json
 from src import db
 
 
-customers = Blueprint('customers', __name__)
-
-# Get all customers from the DB
-@customers.route('/customers', methods=['GET'])
-def get_customers():
-    cursor = db.get_db().cursor()
-    cursor.execute('select company, last_name,\
-        first_name, job_title, business_phone from customers')
-    row_headers = [x[0] for x in cursor.description]
-    json_data = []
-    theData = cursor.fetchall()
-    for row in theData:
-        json_data.append(dict(zip(row_headers, row)))
-    the_response = make_response(jsonify(json_data))
-    the_response.status_code = 200
-    the_response.mimetype = 'application/json'
-    return the_response
-
-# Get customer detail for customer with particular userID
-@customers.route('/customers/<userID>', methods=['GET'])
-def get_customer(userID):
-    cursor = db.get_db().cursor()
-    cursor.execute('select * from customers where id = {0}'.format(userID))
-    row_headers = [x[0] for x in cursor.description]
-    json_data = []
-    theData = cursor.fetchall()
-    for row in theData:
-        json_data.append(dict(zip(row_headers, row)))
-    the_response = make_response(jsonify(json_data))
-    the_response.status_code = 200
-    the_response.mimetype = 'application/json'
-    return the_response
+front_desk_agent = Blueprint('front_desk_agent', __name__)
 
 # Update customer preferences with a particular userID
-@customers.route('/customers/<userID>', methods=['PUT'])
+@front_desk_agent.route('/customers/<userID>', methods=['PUT'])
 def put_customer_pref(userID):
     try:
         pref = request.json  # Get the new preferences from the request body
@@ -64,10 +33,7 @@ def put_customer_pref(userID):
         return jsonify({"error": str(e)}), 500
     
 
-# Insert a new booking for a customer without a reservation
-bookings = Blueprint('bookings', __name__)
-
-@bookings.route('/bookings/new', methods=['POST'])
+@front_desk_agent.route('/bookings/new', methods=['POST'])
 def add_booking():
     try:
         # Extract booking information from request body
@@ -108,12 +74,10 @@ def add_booking():
     except Exception as e:
         db.get_db().rollback()  # Rollback in case of any error
         return jsonify({"error": str(e)}), 500
-    
-    
-preferences = Blueprint('preferences', __name__)
+
 
 # Get all the prefferences for all customers
-@preferences.route('/preferences', methods=['GET'])
+@front_desk_agent.route('/preferences', methods=['GET'])
 def get_preferences():
     try:
         cursor = db.get_db().cursor()
@@ -137,7 +101,7 @@ def get_preferences():
         return jsonify({"error": str(e)}), 500
 
 # Delete a customers preferences    
-@preferences.route('/preferences/<customerID>', methods=['DELETE'])
+@front_desk_agent.route('/preferences/<customerID>', methods=['DELETE'])
 def delete_customer_preferences(customerID):
     try:
         cursor = db.get_db().cursor()
