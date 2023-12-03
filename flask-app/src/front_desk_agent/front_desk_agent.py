@@ -15,7 +15,7 @@ def get_customers():
     theData = cursor.fetchall()
     for row in theData:
         json_data.append(dict(zip(row_headers, row)))
-        return jsonify(json_data)
+    return jsonify(json_data)
 
 # Update customer preferences with a particular userID
 @front_desk_agent.route('/Preference/<customerId>', methods=['PUT'])
