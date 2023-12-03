@@ -6,7 +6,7 @@ from src import db
 hotel_manager = Blueprint('hotel manager', __name__)
 
 # Get all customers from the DB
-@hotel_manager.route('/customers', methods=['GET'])
+@hotel_manager.route('/Customers', methods=['GET'])
 def get_customers():
     cursor = db.get_db().cursor()
     cursor.execute('select company, last_name,\
