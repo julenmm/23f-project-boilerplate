@@ -10,7 +10,7 @@ hotel_manager = Blueprint('hotel manager', __name__)
 def get_customers():
     cursor = db.get_db().cursor()
     cursor.execute('select company, last_name,\
-        first_name, job_title, business_phone from customers;')
+        first_name, job_title, business_phone from Customers;')
     row_headers = [x[0] for x in cursor.description]
     json_data = []
     theData = cursor.fetchall()
