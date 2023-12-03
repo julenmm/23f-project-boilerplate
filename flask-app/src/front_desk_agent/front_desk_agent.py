@@ -5,6 +5,42 @@ from src import db
 
 front_desk_agent = Blueprint('front_desk_agent', __name__)
 
+
+@front_desk_agent.route('/customers', methods=['GET'])
+def list_customers():
+    try:
+        # Establish a database connection
+        cursor = db.get_db().cursor()
+        conn = db.get_db()
+        
+        # SQL Query to fetch all customers
+        query = "SELECT * FROM Customer"
+        
+        # Execute the query
+        cursor.execute(query)
+        
+        # Fetch all the results
+        customers = cursor.fetchall()
+        
+        # Extract the column headers
+        columns = [desc[0] for desc in cursor.description]
+        
+        # Create a list of dictionaries, each representing a customer with their details
+        customer_list = [dict(zip(columns, customer)) for customer in customers]
+        
+        # Close the cursor and connection if they are no longer needed
+        cursor.close()
+        conn.close()
+
+        # Return the customer list as a JSON response
+        return jsonify(customer_list), 200
+    except Exception as e:
+        # If an error occurs, return an error message
+        return jsonify({"error": str(e)}), 500
+
+# Make sure to register the blueprint in your Flask app
+# app.register_blueprint(customers_blueprint, url_prefix='/api')
+
 # Update customer preferences with a particular userID
 @front_desk_agent.route('/Preference/<customerId>', methods=['PUT'])
 def put_customer_pref(customerId):
