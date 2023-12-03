@@ -12,7 +12,7 @@ create database if not exists HotelFranchiseDB;
 -- to change it here too.
 create user if not exists 'webapp'@'%';
 grant all privileges on HotelFranchiseDB.* to 'webapp'@'%';
-flush privileges;
+--flush privileges;
 
 -- Move into the database we just created.
 -- TODO: If you changed the name of the database above, you need to
