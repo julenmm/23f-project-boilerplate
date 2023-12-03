@@ -33,7 +33,6 @@ def create_app():
         return "<h1>Welcome to the 3200 boilerplate app</h1>"
 
     # Import the various Beluprint Objects
-    from src.corporate_sales_manager.corporate_sales_manager import corporate_sales_manager
     from src.front_desk_agent.front_desk_agent  import front_desk_agent
     from src.hotel_manager.hotel_manager import hotel_manager
     from src.housekeeping_supervisor.housekeeping_supervisor  import housekeeping_supervisor
@@ -41,10 +40,10 @@ def create_app():
 
     # Register the routes from each Blueprint with the app object
     # and give a url prefix to each
-
-    app.register_blueprint(front_desk_agent,    url_prefix='/f')
-    app.register_blueprint(hotel_manager,   url_prefix='/m')
-    app.register_blueprint(housekeeping_supervisor,    url_prefix='/s')
+    app.register_blueprint(corporate_sales_manager,   url_prefix='/c')
+    app.register_blueprint(front_desk_agent,    url_prefix='/p')
+    app.register_blueprint(hotel_manager,   url_prefix='/c')
+    app.register_blueprint(housekeeping_supervisor,    url_prefix='/p')
 
 
     # Don't forget to return the app object
