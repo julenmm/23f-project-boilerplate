@@ -19,12 +19,15 @@ def get_customers():
 
 # Get customer detail for customer with particular userID
 @hotel_manager.route('/Customers/<customerId>', methods=['GET'])
-def get_customer(userID):
+def get_customer(customerId):
     cursor = db.get_db().cursor()
-    cursor.execute('select * from customers where id = {0}'.format(userID))
-    row_headers = [x[0] for x in cursor.description]
+    # Use parameterized queries to prevent SQL injection
+    query = 'SELECT * FROM customers WHERE id = %s'
+    cursor.execute(query, (customerId,))
+    row_headers = [x[0] for x in cursor.description]  # this will extract row headers
     json_data = []
     theData = cursor.fetchall()
-    for row in theData:
-        json_data.append(dict(zip(row_headers, row)))
-    return json_data
+    for result in theData:
+        json_data.append(dict(zip(row_headers, result)))
+    # Use jsonify to return a proper JSON response
+    return jsonify(json_data)
