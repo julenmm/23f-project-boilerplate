@@ -40,7 +40,6 @@ def create_app():
 
     # Register the routes from each Blueprint with the app object
     # and give a url prefix to each
-    app.register_blueprint(corporate_sales_manager,   url_prefix='/c')
     app.register_blueprint(front_desk_agent,    url_prefix='/p')
     app.register_blueprint(hotel_manager,   url_prefix='/c')
     app.register_blueprint(housekeeping_supervisor,    url_prefix='/p')
