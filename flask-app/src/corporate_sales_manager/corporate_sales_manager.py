@@ -3,10 +3,10 @@ import json
 from src import db
 
 
-customers = Blueprint('customers', __name__)
+corporate_sales_manager = Blueprint('corporate sales manager', __name__)
 
 # Get all customers from the DB
-@customers.route('/customers', methods=['GET'])
+@corporate_sales_manager.route('/corporate_sales_manager', methods=['GET'])
 def get_customers():
     cursor = db.get_db().cursor()
     cursor.execute('select company, last_name,\
@@ -22,7 +22,7 @@ def get_customers():
     return the_response
 
 # Get customer detail for customer with particular userID
-@customers.route('/customers/<userID>', methods=['GET'])
+@corporate_sales_manager.route('/customers/<userID>', methods=['GET'])
 def get_customer(userID):
     cursor = db.get_db().cursor()
     cursor.execute('select * from customers where id = {0}'.format(userID))
