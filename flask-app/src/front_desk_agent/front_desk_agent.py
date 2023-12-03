@@ -9,7 +9,7 @@ front_desk_agent = Blueprint('front_desk_agent', __name__)
 @front_desk_agent.route('/Customers', methods=['GET'])
 def get_customers():
     cursor = db.get_db().cursor()
-    cursor.execute('select lastName, firstName from Customer;')
+    cursor.execute('select lastName, firstName, customerId from Customer;')
     row_headers = [x[0] for x in cursor.description]
     json_data = []
     theData = cursor.fetchall()
