@@ -9,16 +9,13 @@ front_desk_agent = Blueprint('front_desk_agent', __name__)
 @front_desk_agent.route('/Customers', methods=['GET'])
 def get_customers():
     cursor = db.get_db().cursor()
-    cursor.execute('select lastName, firstName from Customer;')
+    cursor.execute('select lastName, firstName')
     row_headers = [x[0] for x in cursor.description]
     json_data = []
     theData = cursor.fetchall()
     for row in theData:
         json_data.append(dict(zip(row_headers, row)))
-    the_response = make_response(jsonify(json_data))
-    the_response.status_code = 200
-    the_response.mimetype = 'application/json'
-    return the_response
+    return jsonify(json_data)
 
 # Update customer preferences with a particular userID
 @front_desk_agent.route('/Preference/<customerId>', methods=['PUT'])
