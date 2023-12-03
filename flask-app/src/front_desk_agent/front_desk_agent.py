@@ -6,7 +6,7 @@ from src import db
 front_desk_agent = Blueprint('front_desk_agent', __name__)
 
 
-@front_desk_agent.route('/customers', methods=['GET'])
+@front_desk_agent.route('/Customers', methods=['GET'])
 def list_customers():
     try:
         # Establish a database connection
