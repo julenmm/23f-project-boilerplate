@@ -128,3 +128,20 @@ def delete_customer():
     except Exception as e:
         db.get_db().rollback()  # Rollback in case of any error
         return jsonify({"error": str(e)}), 500
+
+# get all rooms for one hotel
+@front_desk_agent.route('/getRooms', methods=['GET'])
+def get_rooms():
+    cursor = db.get_db().cursor()
+
+     # Extract booking information from request body
+    data = request.json
+    hotelId= data['hotelId']
+    
+    cursor.execute('select roomNum, occupancy from Room WHERE hotelId = %s;', (hotelId))
+    row_headers = [x[0] for x in cursor.description]
+    json_data = []
+    theData = cursor.fetchall()
+    for row in theData:
+        json_data.append(dict(zip(row_headers, row)))
+    return jsonify(json_data)
