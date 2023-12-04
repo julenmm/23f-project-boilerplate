@@ -30,6 +30,18 @@ def get_employees():
     return json_data
 
 
+# Get all em and phonenumber
+@hotel_manager.route('/Employee_number', methods=['GET'])
+def get_employees():
+    cursor = db.get_db().cursor()
+    cursor.execute('select lastName, firstName, employeeId phoneNumber from Employee;')
+    row_headers = [x[0] for x in cursor.description]
+    json_data = []
+    theData = cursor.fetchall()
+    for row in theData:
+        json_data.append(dict(zip(row_headers, row)))
+    return json_data
+
 # Delete customer detail for customer with particular userID
 @hotel_manager.route('/delete_employee', methods=['DELETE'])
 def delete_employee():
