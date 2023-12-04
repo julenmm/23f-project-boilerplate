@@ -24,8 +24,8 @@ def get_rooms_cleaned():
         json_data.append(dict(zip(row_headers, row)))
     return jsonify(json_data)
 
-# Return a list of all supply units in stock for a hotel
-@housekeeping_supervisor.route('/supplies', methods=['GET'])
+# get all supply units in stock for a hotel
+@housekeeping_supervisor.route('/supplies_in_stock', methods=['GET'])
 def get_supplies():
     cursor = db.get_db().cursor()
 
@@ -40,6 +40,7 @@ def get_supplies():
     for row in theData:
         json_data.append(dict(zip(row_headers, row)))
     return jsonify(json_data)
+
 
 
 # Return a list of all supply units in stock for a hotel

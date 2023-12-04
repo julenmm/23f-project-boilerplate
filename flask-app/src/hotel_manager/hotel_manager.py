@@ -88,7 +88,6 @@ def add_employee():
         return jsonify({"error": str(e)}), 500
 
 # delete an em
-# Delete a customer    
 @hotel_manager.route('/deleteEmployee', methods=['DELETE'])
 def delete_customer():
     try:
@@ -113,6 +112,64 @@ def delete_customer():
             return jsonify({"message": "No Employee with that id found"}), 404
 
         return jsonify({"message": "Employee deleted successfully"}), 200
+    except Exception as e:
+        db.get_db().rollback()  # Rollback in case of any error
+        return jsonify({"error": str(e)}), 500
+    
+
+# get shift 
+@hotel_manager.route('/Shift', methods=['GET'])
+def get_shift():
+    cursor = db.get_db().cursor()
+    cursor.execute('select timeOff, dateTimeEnd, employeeId, dateTimeStart from Shift;')
+    row_headers = [x[0] for x in cursor.description]
+    json_data = []
+    theData = cursor.fetchall()
+    for row in theData:
+        json_data.append(dict(zip(row_headers, row)))
+    return json_data
+
+
+
+#change employee shift 
+@hotel_manager.route('/change_shift', methods=['POST'])
+def change_employee_shift():
+    try:
+        data = request.get_json()  # Get JSON data from the request body
+        if not data or 'employeeId' not in data or 'dateTimeStart' not in data or 'dateTimeEnd' not in data:
+            return jsonify({"error": "Required data not provided"}), 400
+
+        employee_id = data['employeeId']  # Extract employeeId from JSON
+        new_start_time = data['dateTimeStart']  # Extract new shift start time from JSON
+        new_end_time = data['dateTimeEnd']  # Extract new shift end time from JSON
+
+        cursor = db.get_db().cursor()
+
+        # Check if the shift exists
+        check_query = "SELECT * FROM Shift WHERE employeeId = %s AND dateTimeStart = %s;"
+        cursor.execute(check_query, (employee_id, new_start_time))
+        existing_shift = cursor.fetchone()
+
+        if existing_shift:
+            # Shift exists, update it with new end time
+            update_query = "UPDATE Shift SET dateTimeEnd = %s WHERE employeeId = %s AND dateTimeStart = %s;"
+            cursor.execute(update_query, (new_end_time, employee_id, new_start_time))
+            db.get_db().commit()  # Commit the transaction
+            message = "Shift updated successfully."
+        else:
+            # No shift exists for the given start time, return an error message
+            return jsonify({"error": "Shift not found"}), 404
+
+        # Fetch the updated shift
+        cursor.execute(check_query, (employee_id, new_start_time))
+        row_headers = [x[0] for x in cursor.description]  # this will extract row headers
+        theData = cursor.fetchall()
+        json_data = [dict(zip(row_headers, row)) for row in theData]
+
+        response = make_response(jsonify({"message": message, "data": json_data}), 200)
+        response.mimetype = 'application/json'
+        return response
+
     except Exception as e:
         db.get_db().rollback()  # Rollback in case of any error
         return jsonify({"error": str(e)}), 500
