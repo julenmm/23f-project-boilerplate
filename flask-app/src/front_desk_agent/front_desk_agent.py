@@ -64,7 +64,7 @@ def post_customer_pref():
 
 
 # add a customer  
-@front_desk_agent.route('/addCustomer', methods=['PUT'])
+@front_desk_agent.route('/addCustomer', methods=['POST'])
 def add_customer():
     cursor = db.get_db().cursor()
     try:
