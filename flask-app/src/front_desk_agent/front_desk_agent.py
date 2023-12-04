@@ -5,7 +5,7 @@ from src import db
 
 front_desk_agent = Blueprint('front_desk_agent', __name__)
 
-
+# get all customers
 @front_desk_agent.route('/Customers', methods=['GET'])
 def get_customers():
     cursor = db.get_db().cursor()
@@ -17,6 +17,7 @@ def get_customers():
         json_data.append(dict(zip(row_headers, row)))
     return jsonify(json_data)
 
+# change preference for customer
 @front_desk_agent.route('/Preference', methods=['POST'])
 def post_customer_pref():
     try:
@@ -99,27 +100,31 @@ def get_preferences():
         json_data.append(dict(zip(row_headers, row)))
     return jsonify(json_data)
 
-# Delete a customer's preferences    
-@front_desk_agent.route('/preferences/<customerID>', methods=['DELETE'])
-def delete_customer_preferences(customerID):
+# Delete a customer    
+@front_desk_agent.route('/deleteCustomer', methods=['DELETE'])
+def delete_customer():
     try:
         cursor = db.get_db().cursor()
         
+        # Extract booking information from request body
+        data = request.json
+        customerId = data['customerId']
+
         # First, check if the customer exists
-        cursor.execute("SELECT * FROM Customer WHERE CustomerId = %s;", (customerID,))
+        cursor.execute("SELECT * FROM Customer WHERE CustomerId = %s;", (customerId,))
         customer = cursor.fetchone()
         if not customer:
             return jsonify({"error": "Customer not found"}), 404
         
         # If the customer exists, delete their preferences
-        delete_query = "DELETE FROM Preference WHERE CustomerId = %s;"
-        cursor.execute(delete_query, (customerID,))
+        delete_query = "DELETE FROM Customer WHERE CustomerId = %s;"
+        cursor.execute(delete_query, (customerId,))
         db.get_db().commit()
 
         if cursor.rowcount == 0:
-            return jsonify({"message": "No preferences found for the customer"}), 404
+            return jsonify({"message": "No customer with that id found"}), 404
 
-        return jsonify({"message": "Customer preferences deleted successfully"}), 200
+        return jsonify({"message": "Customer deleted successfully"}), 200
     except Exception as e:
         db.get_db().rollback()  # Rollback in case of any error
         return jsonify({"error": str(e)}), 500
