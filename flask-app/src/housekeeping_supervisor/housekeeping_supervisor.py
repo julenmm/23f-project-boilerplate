@@ -30,6 +30,7 @@ def get_rooms_cleaned():
 # get all supply units in stock for a hotel
 @housekeeping_supervisor.route('/supplies_in_stock', methods=['GET'])
 def get_supplies():
+    data = request.json
     cursor = db.get_db().cursor()
     if not data or 'hotelId' not in data:
         return jsonify({"error": "Required data not provided"}), 400
@@ -97,34 +98,50 @@ def insert_employee_shift_times():
 
 @housekeeping_supervisor.route('/update_time_off', methods=['PATCH'])
 def update_time_off():
-    # Get data from the request body
-    data = request.get_json()
-    employee_id = data['employeeId']
-    date_to_update = data['date']
-    new_time_off_status = data['timeOff']
+    try:
+        # Get data from the request body
+        data = request.get_json()
 
-    cursor = db.get_db().cursor()
-    # Update the timeOff status for a specific date and employeeId
-    cursor.execute("""
-    UPDATE Shift 
-    SET timeOff = %s 
-    WHERE employeeId = %s AND 
-          DATE(dateTimeStart) = %s
-    """, (new_time_off_status, employee_id, date_to_update))
+        # Validate required fields
+        if not data or 'employeeId' not in data or 'date' not in data or 'timeOff' not in data:
+            return jsonify({"error": "Required data not provided"}), 400
 
+        employee_id = data['employeeId']
+        date_to_update = data['date']
+        new_time_off_status = data['timeOff']
 
-    db.get_db().commit()  # Commit the transaction to the database
+        # Check for valid data types or formats, if necessary
+        # ... [Data validation logic here]
 
-    # Return a success message
-    return jsonify({"message": "Time off status updated successfully"}), 200
+        cursor = db.get_db().cursor()
+
+        # Update the timeOff status for a specific date and employeeId
+        cursor.execute("""
+        UPDATE Shift 
+        SET timeOff = %s 
+        WHERE employeeId = %s AND 
+              DATE(dateTimeStart) = %s
+        """, (new_time_off_status, employee_id, date_to_update))
+
+        db.get_db().commit()  # Commit the transaction to the database
+
+        return jsonify({"message": "Time off status updated successfully"}), 200
+
+    except Exception as e:
+        # Rollback in case of an error
+        db.get_db().rollback()
+        return jsonify({"error": str(e)}), 500
 
 # deletes a cleeaning emplot
 @housekeeping_supervisor.route('/fire_cleaning', methods=['DELETE'])
 def fire_cleaning_employee():
-    cursor = db.get_db().cursor()
     try:
+        cursor = db.get_db().cursor()
         # Extract employee information from request body
-        data = request.json
+        data = request.get_json()
+        if not data or 'employeeId' not in data:
+            return jsonify({"error": "Employee ID is required"}), 400
+
         employee_id = data['employeeId']
 
         # Check if there is an employee with the given employeeId and if the role is 'Housekeeper'
@@ -134,20 +151,15 @@ def fire_cleaning_employee():
         employee = cursor.fetchone()
 
         if not employee:
-            # If no employee found with the role 'Housekeeper', return an error message
             return jsonify({"error": "No Housekeeper found with the given ID"}), 404
 
-        # If employee with role 'Housekeeper' exists, proceed with deletion
-        cursor.execute("""
-            DELETE FROM Employee WHERE employeeId = %s;
-        """, (employee_id,))
+        # Proceed with deletion
+        cursor.execute("DELETE FROM Employee WHERE employeeId = %s;", (employee_id,))
         db.get_db().commit()
-
-        # Return a success message
         return jsonify({"message": "Housekeeping employee successfully removed"}), 200
 
     except Exception as e:
-        db.get_db().rollback()  # Rollback in case of any error
+        db.get_db().rollback()
         return jsonify({"error": str(e)}), 500
 
 @housekeeping_supervisor.route('/change_room_cleaned', methods=['PUT'])
