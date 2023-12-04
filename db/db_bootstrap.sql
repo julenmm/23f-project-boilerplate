@@ -46,13 +46,16 @@ CREATE TABLE Employee (
 
 CREATE TABLE Shift (
     timeOff BOOLEAN DEFAULT false,
-    employeeId INTEGER,
+    employeeId INTEGER NOT NULL,
     dateTimeEnd DATETIME,
-    dateTimeStart DATETIME,
+    dateTimeStart DATETIME NOT NULL,
     PRIMARY KEY(employeeId, dateTimeStart),
-    FOREIGN KEY (employeeId) REFERENCES Employee (employeeId)
-        ON UPDATE cascade ON DELETE restrict
+    CONSTRAINT fk_employeeId
+        FOREIGN KEY (employeeId) REFERENCES Employee (employeeId)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 );
+
 
 CREATE TABLE Supplies (
     minUnits INTEGER DEFAULT 1,

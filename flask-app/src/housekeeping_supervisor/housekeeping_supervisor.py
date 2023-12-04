@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, make_response
+from flask import Blueprint, request, jsonify
 import json
 from src import db
 
@@ -6,15 +6,17 @@ from src import db
 housekeeping_supervisor = Blueprint('housekeeping supervisor', __name__)
 
 
-# get all rooms with their cleaned status for a hotel id
+
+# get all rooms for one hotel
 @housekeeping_supervisor.route('/roomsCleaned', methods=['GET'])
 def get_rooms_cleaned():
-    # Get hotelId from the request body
-    data = request.get_json()
-    hotel_id = data['hotelId']
-
     cursor = db.get_db().cursor()
-    cursor.execute('SELECT roomNum, cleaned FROM Room WHERE hotelId = %s', (hotel_id,))
+
+     # Extract booking information from request body
+    data = request.json
+    hotelId= data['hotelId']
+    
+    cursor.execute('select roomNum, cleaned from Room WHERE hotelId = %s;', (hotelId))
     row_headers = [x[0] for x in cursor.description]
     json_data = []
     theData = cursor.fetchall()
@@ -25,12 +27,13 @@ def get_rooms_cleaned():
 # Return a list of all supply units in stock for a hotel
 @housekeeping_supervisor.route('/supplies', methods=['GET'])
 def get_supplies():
-    # Get hotelId from the request body
-    data = request.get_json()
-    hotel_id = data['hotelId']
-
     cursor = db.get_db().cursor()
-    cursor.execute('SELECT name, unitsInStock FROM Supplies WHERE hotelId = %s', (hotel_id,))
+
+    # Get hotelId from the request body
+    data = request.json
+    hotelId = data['hotelId']
+
+    cursor.execute('select name, unitsInStock FROM Supplies WHERE hotelId = %s;', (hotelId))
     row_headers = [x[0] for x in cursor.description]
     json_data = []
     theData = cursor.fetchall()
