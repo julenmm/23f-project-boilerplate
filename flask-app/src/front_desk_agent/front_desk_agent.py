@@ -18,7 +18,7 @@ def get_customers():
     return jsonify(json_data)
 
 # change preference for customer
-@front_desk_agent.route('/Preference', methods=['POST'])
+@front_desk_agent.route('/Preference', methods=['PUT'])
 def post_customer_pref():
     try:
         data = request.get_json()  # Get JSON data from the request body
@@ -64,7 +64,7 @@ def post_customer_pref():
 
 
 # add a customer  
-@front_desk_agent.route('/addCustomer', methods=['PUT'])
+@front_desk_agent.route('/addCustomer', methods=['POST'])
 def add_customer():
     cursor = db.get_db().cursor()
     try:
