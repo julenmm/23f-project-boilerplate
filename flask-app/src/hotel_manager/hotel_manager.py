@@ -129,8 +129,6 @@ def get_shift():
         json_data.append(dict(zip(row_headers, row)))
     return json_data
 
-
-
 #add employee shift 
 @hotel_manager.route('/add_shift', methods=['POST'])
 def add_employee_shift():
