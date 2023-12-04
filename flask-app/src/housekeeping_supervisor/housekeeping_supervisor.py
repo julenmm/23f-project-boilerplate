@@ -103,7 +103,7 @@ def update_time_off():
         data = request.get_json()
 
         # Validate required fields
-        if not data or 'employeeId' not in data or 'date' not in data or 'timeOff' not in data:
+        if not data or 'employeeId' not in data or 'date_to_update' not in data or 'new_time_off_status' not in data:
             return jsonify({"error": "Required data not provided"}), 400
 
         employee_id = data['employeeId']
