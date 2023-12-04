@@ -11,12 +11,12 @@ housekeeping_supervisor = Blueprint('housekeeping supervisor', __name__)
 # get all rooms for one hotel
 @housekeeping_supervisor.route('/rooms_cleaned', methods=['GET'])
 def get_rooms_cleaned():
+    data = request.get_json()
     cursor = db.get_db().cursor()
     if not data or 'hotelId' not in data:
         return jsonify({"error": "Required data not provided"}), 400
 
      # Extract booking information from request body
-    data = request.json
     hotelId= data['hotelId']
     
     cursor.execute('select roomNum, cleaned from Room WHERE hotelId = %s;', (hotelId))
@@ -30,7 +30,7 @@ def get_rooms_cleaned():
 # get all supply units in stock for a hotel
 @housekeeping_supervisor.route('/supplies_in_stock', methods=['GET'])
 def get_supplies():
-    data = request.json
+    data = request.get_json()
     cursor = db.get_db().cursor()
     if not data or 'hotelId' not in data:
         return jsonify({"error": "Required data not provided"}), 400
