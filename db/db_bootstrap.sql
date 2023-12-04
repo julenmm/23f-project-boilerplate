@@ -105,7 +105,7 @@ CREATE TABLE Preference (
     customerId INTEGER,
     preference VARCHAR(500),
     FOREIGN KEY (customerId) REFERENCES Customer (customerId)
-        ON UPDATE cascade ON DELETE restrict
+        ON UPDATE cascade ON DELETE cascade
 );
 
 -- Add sample data.
