@@ -45,7 +45,7 @@ CREATE TABLE Employee (
 );
 
 CREATE TABLE Shift (
-    timeOff BOOLEAN,
+    timeOff BOOLEAN DEFAULT false,
     employeeId INTEGER,
     dateTimeEnd DATETIME,
     dateTimeStart DATETIME,
