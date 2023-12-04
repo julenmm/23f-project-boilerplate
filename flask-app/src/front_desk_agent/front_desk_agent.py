@@ -17,7 +17,7 @@ def get_customers():
         json_data.append(dict(zip(row_headers, row)))
     return jsonify(json_data)
 
-@front_desk_agent.route('/Preference/', methods=['POST'])
+@front_desk_agent.route('/Preference', methods=['POST'])
 def post_customer_pref():
     try:
         data = request.get_json()  # Get JSON data from the request body
@@ -109,28 +109,16 @@ def add_booking():
         return jsonify({"error": str(e)}), 500
 
 # Get all the prefferences for all customers
-@front_desk_agent.route('/preferences', methods=['GET'])
+@front_desk_agent.route('/get-preferences', methods=['GET'])
 def get_preferences():
-    try:
-        cursor = db.get_db().cursor()
-        # Query to select all preferences along with customer information
-        query = """
-        SELECT Customer.FirstName, Customer.LastName, Preference.Preference
-        FROM Customer
-        INNER JOIN Preference ON Customer.CustomerId = Preference.CustomerId
-        """
-        cursor.execute(query)
-        row_headers = [x[0] for x in cursor.description]  # this will extract row headers
-        results = cursor.fetchall()
-        
-        # Convert query to json format
-        json_data = []
-        for result in results:
-            json_data.append(dict(zip(row_headers, result)))
-
-        return jsonify(json_data), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    cursor = db.get_db().cursor()
+    cursor.execute('select customerId, preference from Preference;')
+    row_headers = [x[0] for x in cursor.description]
+    json_data = []
+    theData = cursor.fetchall()
+    for row in theData:
+        json_data.append(dict(zip(row_headers, row)))
+    return jsonify(json_data)
 
 # Delete a customer's preferences    
 @front_desk_agent.route('/preferences/<customerID>', methods=['DELETE'])
