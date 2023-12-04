@@ -98,7 +98,7 @@ CREATE TABLE Booking (
     FOREIGN KEY (hotelId) REFERENCES Room (hotelId)
         ON UPDATE cascade ON DELETE restrict,
     FOREIGN KEY (customerId) REFERENCES Customer (customerId)
-        ON UPDATE cascade ON DELETE restrict
+        ON UPDATE cascade ON DELETE cascade
 );
 
 CREATE TABLE Preference (
