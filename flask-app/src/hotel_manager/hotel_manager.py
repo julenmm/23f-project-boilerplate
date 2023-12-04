@@ -56,24 +56,63 @@ def delete_employee():
     return "Deleted Successfully"
 
 
-@hotel_manager.route('/add_employee', methods=['POST'])
-def add_employee(employeeId):
-    # get the new emloyee details from the request
-    employeeId = request.json.get("add_employeeId", None) 
-    firstName = request.json.get("add_firstname", None)
-    lastName = request.json.get("add_lastname", None)
-    phoneNumber = request.json.get("add_phoneNumber", None)
-    weeklyHours = request.json.get("add_weeklyHours", None) 
-    hourlypay = request.json.get("add_hourlyPay", None) 
-
-    # get a cursor object from the database
+# add an em  
+@hotel_manager.route('/add_employee', methods=['PUT'])
+def add_employee():
     cursor = db.get_db().cursor()
-    # construct the insert statement
-    insert_stmt = 'INSERT INTO Employee (employeeId, firstName, lastName, phoneNumber, weeklyHours, hourlypay) VALUES (' + str(employeeId) + ', "' + firstName + '", "'+ lastName + '", "' + str(phoneNumber) + ', ' + str(weeklyHours)+ ', ' + str(hourlypay) + ')'
-    # execute the query
-    cursor.execute(insert_stmt)
-    # commit the changes to the database
-    db.get_db().commit()
+    try:
+        # Extract employee information from request body
+        data = request.get_json()
+        phoneNumber = data.get("phoneNumber")
+        weeklyHours = data.get("weeklyHours")
+        approvedDaysOff = data.get("approvedDaysOff")
+        requestedDaysOffStart = data.get("requestedDaysOffStart")
+        requestedDaysOffEnd = data.get("requestedDaysOffEnd")
+        firstName = data.get("firstName")  # Make sure the key matches exactly with the JSON key
+        lastName = data.get("lastName")
+        hourlyPay = data.get("hourlyPay")
+        role = data.get("role")
+        hotelId = data.get("hotelId")
 
-    # return a success message
-    return "employee added successfully"
+        # Insert new employee - Make sure the number of %s placeholders matches the number of columns
+        cursor.execute("""
+            INSERT INTO Employee (phoneNumber, weeklyHours, approvedDaysOff, requestedDaysOffStart, requestedDaysOffEnd, firstName, lastName, hourlyPay, role, hotelId) 
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
+        """, (phoneNumber, weeklyHours, approvedDaysOff, requestedDaysOffStart, requestedDaysOffEnd, firstName, lastName, hourlyPay, role, hotelId))
+        db.get_db().commit()
+
+        return jsonify({"message": "Employee successfully added", "information": data}), 201
+
+    except Exception as e:
+        db.get_db().rollback()  # Rollback in case of any error
+        return jsonify({"error": str(e)}), 500
+
+# delete an em
+# Delete a customer    
+@hotel_manager.route('/deleteEmployee', methods=['DELETE'])
+def delete_customer():
+    try:
+        cursor = db.get_db().cursor()
+        
+        # Extract booking information from request body
+        data = request.json
+        employeeId = data['employeeId']
+
+        # First, check if the employee exists
+        cursor.execute("SELECT * FROM Employee WHERE employeeId = %s;", (employeeId,))
+        employee = cursor.fetchone()
+        if not employee:
+            return jsonify({"error": "Employee not found"}), 404
+        
+        # If the Employee exists, delete their preferences
+        delete_query = "DELETE FROM Employee WHERE employeeId = %s;"
+        cursor.execute(delete_query, (employeeId,))
+        db.get_db().commit()
+
+        if cursor.rowcount == 0:
+            return jsonify({"message": "No Employee with that id found"}), 404
+
+        return jsonify({"message": "Employee deleted successfully"}), 200
+    except Exception as e:
+        db.get_db().rollback()  # Rollback in case of any error
+        return jsonify({"error": str(e)}), 500
