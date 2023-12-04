@@ -30,8 +30,6 @@ def get_employee():
     return json_data
 
 
-
-
 # Get all em and phonenumber
 @hotel_manager.route('/Employee_number', methods=['GET'])
 def get_employees_phone_number():
@@ -70,13 +68,10 @@ def add_employee(employeeId):
 
     # get a cursor object from the database
     cursor = db.get_db().cursor()
-
     # construct the insert statement
     insert_stmt = 'INSERT INTO Employee (employeeId, firstName, lastName, phoneNumber, weeklyHours, hourlypay) VALUES (' + str(employeeId) + ', "' + firstName + '", "'+ lastName + '", "' + str(phoneNumber) + ', ' + str(weeklyHours)+ ', ' + str(hourlypay) + ')'
-
     # execute the query
     cursor.execute(insert_stmt)
-
     # commit the changes to the database
     db.get_db().commit()
 

@@ -13,16 +13,13 @@ def get_rooms_cleaned():
     hotel_id = data['hotelId']
 
     cursor = db.get_db().cursor()
-    cursor.execute('SELECT room_number, cleaned_status FROM rooms WHERE hotelId = %s', (hotel_id,))
+    cursor.execute('SELECT roomNum, cleaned FROM rooms WHERE hotelId = %s', (hotel_id,))
     row_headers = [x[0] for x in cursor.description]
     json_data = []
     theData = cursor.fetchall()
     for row in theData:
         json_data.append(dict(zip(row_headers, row)))
-    the_response = make_response(jsonify(json_data))
-    the_response.status_code = 200
-    the_response.mimetype = 'application/json'
-    return the_response
+    return json_data
 
 # Return a list of all supply units in stock for a hotel
 @housekeeping_supervisor.route('/supplies', methods=['GET'])
