@@ -106,9 +106,9 @@ def update_time_off():
         if not data or 'employeeId' not in data or 'date_to_update' not in data or 'new_time_off_status' not in data:
             return jsonify({"error": "Required data not provided"}), 400
 
-        employee_id = data['employeeId']
-        date_to_update = data['date']
-        new_time_off_status = data['timeOff']
+        employee_id = data['employee_id']
+        date_to_update = data['date_to_update']
+        new_time_off_status = data['new_time_off_status']
 
         # Check for valid data types or formats, if necessary
         # ... [Data validation logic here]
