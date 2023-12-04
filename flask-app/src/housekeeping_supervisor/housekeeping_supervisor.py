@@ -5,6 +5,7 @@ from src import db
 
 housekeeping_supervisor = Blueprint('housekeeping supervisor', __name__)
 
+
 # get all rooms with their cleaned status for a hotel id
 @housekeeping_supervisor.route('/roomsCleaned', methods=['GET'])
 def get_rooms_cleaned():
@@ -13,13 +14,13 @@ def get_rooms_cleaned():
     hotel_id = data['hotelId']
 
     cursor = db.get_db().cursor()
-    cursor.execute('SELECT roomNum, cleaned FROM rooms WHERE hotelId = %s', (hotel_id,))
+    cursor.execute('SELECT roomNum, cleaned FROM Room WHERE hotelId = %s', (hotel_id,))
     row_headers = [x[0] for x in cursor.description]
     json_data = []
     theData = cursor.fetchall()
     for row in theData:
         json_data.append(dict(zip(row_headers, row)))
-    return json_data
+    return jsonify(json_data)
 
 # Return a list of all supply units in stock for a hotel
 @housekeeping_supervisor.route('/supplies', methods=['GET'])
@@ -35,10 +36,7 @@ def get_supplies():
     theData = cursor.fetchall()
     for row in theData:
         json_data.append(dict(zip(row_headers, row)))
-    the_response = make_response(jsonify(json_data))
-    the_response.status_code = 200
-    the_response.mimetype = 'application/json'
-    return the_response
+    return jsonify(json_data)
 
 
 # Return a list of all supply units in stock for a hotel
