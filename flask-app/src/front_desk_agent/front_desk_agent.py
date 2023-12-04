@@ -63,7 +63,7 @@ def post_customer_pref():
 
 
 # add a customer  
-@front_desk_agent.route('/addCustomer', methods=['POST'])
+@front_desk_agent.route('/addCustomer', methods=['PUT'])
 def add_customer():
     cursor = db.get_db().cursor()
     try:
@@ -76,7 +76,7 @@ def add_customer():
 
         # Insert new booking
         cursor.execute("""
-            INSERT INTO Booking (phoneNumber, mostRecentStay, firstName, lastName) 
+            INSERT INTO Customer (phoneNumber, mostRecentStay, firstName, lastName) 
             VALUES (%s, %s, %s, %s);
         """, (phone_numeber, most_recent_stay, first_name, last_name))
         db.get_db().commit()
