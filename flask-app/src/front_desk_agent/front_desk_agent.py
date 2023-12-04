@@ -60,49 +60,28 @@ def post_customer_pref():
     except Exception as e:
         db.get_db().rollback()  # Rollback in case of any error
         return jsonify({"error": str(e)}), 500
-    
-@front_desk_agent.route('/bookings', methods=['POST'])
-def add_booking():
+
+
+# add a customer  
+@front_desk_agent.route('/addCustomer', methods=['POST'])
+def add_customer():
+    cursor = db.get_db().cursor()
     try:
         # Extract booking information from request body
         data = request.json
-        customer_id = data['customer_id']
-        room_num = data['room_num']
-        hotel_id = data['hotel_id']
-        occupancy_start_date = data['occupancy_start_date']
-        occupancy_end_date = data['occupancy_end_date']
-
-        # Validate date order
-        if occupancy_start_date >= occupancy_end_date:
-            return jsonify({"error": "Occupancy start date must be before end date"}), 400
-
-        # Check if customer exists
-        cursor = db.get_db().cursor()
-        cursor.execute("SELECT * FROM Customer WHERE CustomerId = %s;", (customer_id,))
-        customer = cursor.fetchone()
-        if not customer:
-            return jsonify({"error": "Customer not found"}), 404
-
-        # Check if room is available
-        cursor.execute("""
-            SELECT * FROM Booking 
-            WHERE RoomNum = %s AND HotelId = %s AND (
-                (OccupancyStartDate < %s AND OccupancyEndDate > %s) OR
-                (OccupancyStartDate < %s AND OccupancyEndDate > %s)
-            )
-        """, (room_num, hotel_id, occupancy_end_date, occupancy_start_date, occupancy_start_date, occupancy_end_date))
-        booking = cursor.fetchone()
-        if booking:
-            return jsonify({"error": "Room is not available for the selected dates"}), 400
+        phone_numeber = data['phoneNumber']
+        most_recent_stay = data['mostRecentStay']
+        first_name = data['firstName']
+        last_name = data['lastName']
 
         # Insert new booking
         cursor.execute("""
-            INSERT INTO Booking (RoomNum, HotelId, CustomerId, OccupancyStartDate, OccupancyEndDate) 
-            VALUES (%s, %s, %s, %s, %s);
-        """, (room_num, hotel_id, customer_id, occupancy_start_date, occupancy_end_date))
+            INSERT INTO Booking (phoneNumber, mostRecentStay, firstName, lastName) 
+            VALUES (%s, %s, %s, %s);
+        """, (phone_numeber, most_recent_stay, first_name, last_name))
         db.get_db().commit()
 
-        return jsonify({"message": "Booking successfully added", "booking_details": data}), 201
+        return jsonify({"message": "Customer successfully added", "booking_details": data}), 201
 
     except Exception as e:
         db.get_db().rollback()  # Rollback in case of any error
