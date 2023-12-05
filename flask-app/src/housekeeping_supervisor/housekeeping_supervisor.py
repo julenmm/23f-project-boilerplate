@@ -210,3 +210,15 @@ def get_housekeepers():
     for row in theData:
         json_data.append(dict(zip(row_headers, row)))
     return jsonify(json_data)
+
+# get shift 
+@housekeeping_supervisor.route('/Shift', methods=['GET'])
+def get_shift():
+    cursor = db.get_db().cursor()
+    cursor.execute('select timeOff, dateTimeEnd, employeeId, dateTimeStart from Shift;')
+    row_headers = [x[0] for x in cursor.description]
+    json_data = []
+    theData = cursor.fetchall()
+    for row in theData:
+        json_data.append(dict(zip(row_headers, row)))
+    return json_data
