@@ -202,3 +202,13 @@ def change_room_cleaned():
         db.get_db().rollback()  # Rollback in case of any error
         return jsonify({'error': str(e)}), 500
 
+@housekeeping_supervisor.route('/get_housekeepers', methods=['GET'])
+def get_housekeepers():
+    cursor = db.get_db().cursor()
+    cursor.execute("SELECT lastName, firstName, employeeId FROM Employee WHERE role = 'Housekeeper';")
+    row_headers = [x[0] for x in cursor.description]
+    json_data = []
+    theData = cursor.fetchall()
+    for row in theData:
+        json_data.append(dict(zip(row_headers, row)))
+    return jsonify(json_data)
