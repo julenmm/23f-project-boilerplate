@@ -30,7 +30,7 @@ def get_employee():
     return json_data
 
 
-# Get all em and phonenumber
+# Get all employees and phonenumber
 @hotel_manager.route('/Employee_number', methods=['GET'])
 def get_employees_phone_number():
     cursor = db.get_db().cursor()
@@ -56,7 +56,7 @@ def delete_employee():
     return "Deleted Successfully"
 
 
-# add an em  
+# add an employee  
 @hotel_manager.route('/add_employee', methods=['PUT'])
 def add_employee():
     cursor = db.get_db().cursor()
@@ -87,7 +87,7 @@ def add_employee():
         db.get_db().rollback()  # Rollback in case of any error
         return jsonify({"error": str(e)}), 500
 
-# delete an em
+# delete an employee
 @hotel_manager.route('/deleteEmployee', methods=['DELETE'])
 def delete_customer():
     try:
@@ -131,7 +131,7 @@ def get_shift():
 
 
 
-#change employee shift 
+# Change employee shift 
 @hotel_manager.route('/change_shift', methods=['POST'])
 def change_employee_shift():
     try:

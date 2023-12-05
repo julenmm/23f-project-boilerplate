@@ -45,7 +45,7 @@ def get_supplies():
 
 
 
-# Return a list of all supply units in stock for a hotel
+# Add a new shift
 @housekeeping_supervisor.route('/shifts', methods=['POST'])  
 def insert_employee_shift_times():
     data = request.get_json()
@@ -92,6 +92,7 @@ def insert_employee_shift_times():
         db.get_db().rollback()
         return jsonify({"error": str(e)}), 500
 
+# Updates time off for housekeeping employee
 @housekeeping_supervisor.route('/update_time_off', methods=['PATCH'])
 def update_time_off():
     try:
@@ -128,7 +129,7 @@ def update_time_off():
         db.get_db().rollback()
         return jsonify({"error": str(e)}), 500
 
-# deletes a cleeaning emplot
+# Deletes a cleaning emplot
 @housekeeping_supervisor.route('/fire_cleaning', methods=['DELETE'])
 def fire_cleaning_employee():
     try:
@@ -158,6 +159,7 @@ def fire_cleaning_employee():
         db.get_db().rollback()
         return jsonify({"error": str(e)}), 500
 
+# Changes cleaning status of room
 @housekeeping_supervisor.route('/change_room_cleaned', methods=['PUT'])
 def change_room_cleaned():
     cursor = db.get_db().cursor()
@@ -198,6 +200,7 @@ def change_room_cleaned():
         db.get_db().rollback()  # Rollback in case of any error
         return jsonify({'error': str(e)}), 500
 
+# Get list of housekeeping employees
 @housekeeping_supervisor.route('/get_housekeepers', methods=['GET'])
 def get_housekeepers():
     cursor = db.get_db().cursor()
@@ -209,7 +212,7 @@ def get_housekeepers():
         json_data.append(dict(zip(row_headers, row)))
     return jsonify(json_data)
 
-# get shift 
+# Get shift 
 @housekeeping_supervisor.route('/Shift', methods=['GET'])
 def get_shift():
     cursor = db.get_db().cursor()
