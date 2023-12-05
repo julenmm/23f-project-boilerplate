@@ -6,6 +6,7 @@ from src import db
 front_desk_agent = Blueprint('front_desk_agent', __name__)
 
 # get all customers
+@front_desk_agent.route('/customers', methods=['GET'])
 def get_customers():
     try:
         cursor = db.get_db().cursor()
