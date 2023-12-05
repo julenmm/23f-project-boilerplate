@@ -94,14 +94,17 @@ def add_customer():
 # Get all the prefferences for all customers
 @front_desk_agent.route('/get_preferences', methods=['GET'])
 def get_preferences():
-    cursor = db.get_db().cursor()
-    cursor.execute('select customerId, preference from Preference;')
-    row_headers = [x[0] for x in cursor.description]
-    json_data = []
-    theData = cursor.fetchall()
-    for row in theData:
-        json_data.append(dict(zip(row_headers, row)))
-    return jsonify(json_data)
+    try:
+        cursor = db.get_db().cursor()
+        cursor.execute('SELECT customerId, preference FROM Preference;')
+        row_headers = [x[0] for x in cursor.description]
+        json_data = []
+        theData = cursor.fetchall()
+        for row in theData:
+            json_data.append(dict(zip(row_headers, row)))
+        return jsonify(json_data)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 # Delete a customer    
 @front_desk_agent.route('/delete_customer', methods=['DELETE'])
@@ -135,11 +138,14 @@ def delete_customer():
 # get all rooms for one hotel
 @front_desk_agent.route('/get_rooms', methods=['GET'])
 def get_rooms():
-    cursor = db.get_db().cursor()
-    cursor.execute('select roomNum, hotelId, occupancy from Room;')
-    row_headers = [x[0] for x in cursor.description]
-    json_data = []
-    theData = cursor.fetchall()
-    for row in theData:
-        json_data.append(dict(zip(row_headers, row)))
-    return jsonify(json_data)
+    try:
+        cursor = db.get_db().cursor()
+        cursor.execute('SELECT roomNum, hotelId, occupancy FROM Room;')
+        row_headers = [x[0] for x in cursor.description]
+        json_data = []
+        theData = cursor.fetchall()
+        for row in theData:
+            json_data.append(dict(zip(row_headers, row)))
+        return jsonify(json_data)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
