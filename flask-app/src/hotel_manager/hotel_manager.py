@@ -163,3 +163,45 @@ def add_employee_shift():
     except Exception as e:
         db.get_db().rollback()  # Rollback in case of any error
         return jsonify({"error": str(e)}), 500
+
+# Update employee phone number
+@hotel_manager.route('/update_employee', methods=['PUT'])
+def update_employee_phoneNumber():
+    try:
+        data = request.get_json()  # Get JSON data from the request body
+        if not data or 'employeeId' not in data or 'phoneNumber' not in data:
+            return jsonify({"error": "Required data not provided"}), 400
+
+        employeeId = data['employeeId']  # Extract customerId from JSON
+        phoneNumber = data['phoneNumber']  # Extract preference from JSON
+
+        cursor = db.get_db().cursor()
+
+        # Check if preferences already exist for the customer
+        check_query = "SELECT * FROM Employee WHERE employeeId = %s;"
+        cursor.execute(check_query, (employeeId,))
+        existing_pref = cursor.fetchone()
+
+        if existing_pref:
+            # Preferences already exist, update them
+            update_query = "UPDATE Employee SET phoneNumber = %s WHERE employeeId = %s;"
+            cursor.execute(update_query, (phoneNumber, employeeId))
+            db.get_db().commit()  # Commit the transaction
+            message = "Employee phonenumber updated successfully."
+        else:
+            # Return message of no employee
+            message = "Employee not found."
+
+        # Fetch the updated preferences
+        cursor.execute("SELECT * FROM Employee WHERE employeeId = %s;", (employeeId,))
+        row_headers = [x[0] for x in cursor.description]
+        theData = cursor.fetchall()
+        json_data = [dict(zip(row_headers, row)) for row in theData]
+
+        response = make_response(jsonify({"message": message, "data": json_data}), 200)
+        response.mimetype = 'application/json'
+        return response
+
+    except Exception as e:
+        db.get_db().rollback()  # Rollback in case of any error
+        return jsonify({"error": str(e)}), 500
