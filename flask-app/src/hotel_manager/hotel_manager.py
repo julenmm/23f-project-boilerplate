@@ -158,7 +158,7 @@ def add_employee_shift():
 
         response = make_response(jsonify({"message": message, "data": json_data}), 201)
         response.mimetype = 'application/json'
-        return jsonify(response)
+        return jsonify(json_data)
 
     except Exception as e:
         db.get_db().rollback()  # Rollback in case of any error
