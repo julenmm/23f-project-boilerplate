@@ -30,22 +30,20 @@ def get_rooms_cleaned():
 # get all supply units in stock for a hotel
 @housekeeping_supervisor.route('/supplies_in_stock', methods=['GET'])
 def get_supplies():
-    data = request.get_json()
     cursor = db.get_db().cursor()
-    if not data or 'hotelId' not in data:
-        return jsonify({"error": "Required data not provided"}), 400
 
-    # Get hotelId from the request body
-    data = request.json
-    hotelId = data['hotelId']
-
-    cursor.execute('select name, unitsInStock, hotelId FROM Supplies;')
-    row_headers = [x[0] for x in cursor.description]
+    # Execute a query to get all supplies from all hotels
+    cursor.execute('SELECT name, unitsInStock, hotelId FROM Supplies;')
+    row_headers = [x[0] for x in cursor.description]  # Get column headers
     json_data = []
     theData = cursor.fetchall()
+
+    # Creating a JSON response with the fetched data
     for row in theData:
         json_data.append(dict(zip(row_headers, row)))
+
     return jsonify(json_data)
+
 
 
 
