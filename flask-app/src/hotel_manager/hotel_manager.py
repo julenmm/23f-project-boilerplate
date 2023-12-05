@@ -129,9 +129,8 @@ def get_shift():
 
 
 
-# Add employee shift 
 @hotel_manager.route('/add_shift', methods=['POST'])
-def change_employee_shift():
+def add_employee_shift():
     try:
         data = request.get_json()  # Get JSON data from the request body
         if not data or 'employeeId' not in data or 'dateTimeStart' not in data or 'dateTimeEnd' not in data:
@@ -143,30 +142,23 @@ def change_employee_shift():
 
         cursor = db.get_db().cursor()
 
-        # Check if the shift exists
+        # Insert a new shift
+        insert_query = "INSERT INTO Shift (employeeId, dateTimeStart, dateTimeEnd) VALUES (%s, %s, %s);"
+        cursor.execute(insert_query, (employee_id, new_start_time, new_end_time))
+        db.get_db().commit()  # Commit the transaction
+
+        message = "Shift added successfully."
+
+        # Fetch the added shift
         check_query = "SELECT * FROM Shift WHERE employeeId = %s AND dateTimeStart = %s;"
         cursor.execute(check_query, (employee_id, new_start_time))
-        existing_shift = cursor.fetchone()
-
-        if existing_shift:
-            # Shift exists, update it with new end time
-            update_query = "UPDATE Shift SET dateTimeEnd = %s WHERE employeeId = %s AND dateTimeStart = %s;"
-            cursor.execute(update_query, (new_end_time, employee_id, new_start_time))
-            db.get_db().commit()  # Commit the transaction
-            message = "Shift updated successfully."
-        else:
-            # No shift exists for the given start time, return an error message
-            return jsonify({"error": "Shift not found"}), 404
-
-        # Fetch the updated shift
-        cursor.execute(check_query, (employee_id, new_start_time))
-        row_headers = [x[0] for x in cursor.description]  # this will extract row headers
+        row_headers = [x[0] for x in cursor.description]  # Extract row headers
         theData = cursor.fetchall()
         json_data = [dict(zip(row_headers, row)) for row in theData]
 
-        response = make_response(jsonify({"message": message, "data": json_data}), 200)
+        response = make_response(jsonify({"message": message, "data": json_data}), 201)
         response.mimetype = 'application/json'
-        return response
+        return jsonify(response)
 
     except Exception as e:
         db.get_db().rollback()  # Rollback in case of any error
