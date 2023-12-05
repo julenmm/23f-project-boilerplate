@@ -213,7 +213,7 @@ def get_housekeepers():
     return jsonify(json_data)
 
 # Get shift 
-@housekeeping_supervisor.route('/Shift', methods=['GET'])
+@housekeeping_supervisor.route('/shift', methods=['GET'])
 def get_shift():
     cursor = db.get_db().cursor()
     cursor.execute('select timeOff, dateTimeEnd, employeeId, dateTimeStart from Shift;')
