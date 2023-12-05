@@ -838,7 +838,6 @@ VALUES
     
 
 
-
 INSERT INTO Customer (phoneNumber, mostRecentStay, firstName, lastName, customerId)
   VALUES
   ('752-647-6613', '2023-03-05', 'Cullan', 'Eakens', 1),
