@@ -39,7 +39,7 @@ def get_supplies():
     data = request.json
     hotelId = data['hotelId']
 
-    cursor.execute('select name, unitsInStock FROM Supplies WHERE hotelId = %s;', (hotelId))
+    cursor.execute('select name, unitsInStock, hotelId FROM Supplies;')
     row_headers = [x[0] for x in cursor.description]
     json_data = []
     theData = cursor.fetchall()
