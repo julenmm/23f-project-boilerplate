@@ -5,20 +5,8 @@ from src import db
 
 hotel_manager = Blueprint('hotel manager', __name__)
 
-# Get all customers from the DB
-@hotel_manager.route('/Customers', methods=['GET'])
-def get_customers():
-    cursor = db.get_db().cursor()
-    cursor.execute('select lastName, firstName, customerId from Customer;')
-    row_headers = [x[0] for x in cursor.description]
-    json_data = []
-    theData = cursor.fetchall()
-    for row in theData:
-        json_data.append(dict(zip(row_headers, row)))
-    return json_data
-
 # Get all employee from the DB
-@hotel_manager.route('/Employee', methods=['GET'])
+@hotel_manager.route('/employee', methods=['GET'])
 def get_employee():
     cursor = db.get_db().cursor()
     cursor.execute('select lastName, firstName, employeeId from Employee;')
@@ -31,7 +19,7 @@ def get_employee():
 
 
 # Get all employees and phonenumber
-@hotel_manager.route('/Employee_number', methods=['GET'])
+@hotel_manager.route('/employee_number', methods=['GET'])
 def get_employees_phone_number():
     cursor = db.get_db().cursor()
     cursor.execute('select lastName, firstName, employeeId, phoneNumber from Employee;')
@@ -88,7 +76,7 @@ def add_employee():
         return jsonify({"error": str(e)}), 500
 
 # delete an employee
-@hotel_manager.route('/deleteEmployee', methods=['DELETE'])
+@hotel_manager.route('/delete_employee', methods=['DELETE'])
 def delete_customer():
     try:
         cursor = db.get_db().cursor()
@@ -118,7 +106,7 @@ def delete_customer():
     
 
 # get shift 
-@hotel_manager.route('/Shift', methods=['GET'])
+@hotel_manager.route('/shift', methods=['GET'])
 def get_shift():
     cursor = db.get_db().cursor()
     cursor.execute('select timeOff, dateTimeEnd, employeeId, dateTimeStart from Shift;')

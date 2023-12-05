@@ -6,19 +6,21 @@ from src import db
 front_desk_agent = Blueprint('front_desk_agent', __name__)
 
 # get all customers
-@front_desk_agent.route('/Customers', methods=['GET'])
 def get_customers():
-    cursor = db.get_db().cursor()
-    cursor.execute('select lastName, firstName, customerId from Customer;')
-    row_headers = [x[0] for x in cursor.description]
-    json_data = []
-    theData = cursor.fetchall()
-    for row in theData:
-        json_data.append(dict(zip(row_headers, row)))
-    return jsonify(json_data)
+    try:
+        cursor = db.get_db().cursor()
+        cursor.execute('SELECT lastName, firstName, customerId FROM Customer;')
+        row_headers = [x[0] for x in cursor.description]  # this will extract row headers
+        json_data = []
+        theData = cursor.fetchall()
+        for row in theData:
+            json_data.append(dict(zip(row_headers, row)))
+        return jsonify(json_data)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 # change preference for customer
-@front_desk_agent.route('/Preference', methods=['PUT'])
+@front_desk_agent.route('/preference', methods=['PUT'])
 def post_customer_pref():
     try:
         data = request.get_json()  # Get JSON data from the request body
@@ -64,7 +66,7 @@ def post_customer_pref():
 
 
 # add a customer  
-@front_desk_agent.route('/addCustomer', methods=['POST'])
+@front_desk_agent.route('/add_customer', methods=['POST'])
 def add_customer():
     cursor = db.get_db().cursor()
     try:
@@ -89,7 +91,7 @@ def add_customer():
         return jsonify({"error": str(e)}), 500
 
 # Get all the prefferences for all customers
-@front_desk_agent.route('/get-preferences', methods=['GET'])
+@front_desk_agent.route('/get_preferences', methods=['GET'])
 def get_preferences():
     cursor = db.get_db().cursor()
     cursor.execute('select customerId, preference from Preference;')
@@ -101,7 +103,7 @@ def get_preferences():
     return jsonify(json_data)
 
 # Delete a customer    
-@front_desk_agent.route('/deleteCustomer', methods=['DELETE'])
+@front_desk_agent.route('/delete_customer', methods=['DELETE'])
 def delete_customer():
     try:
         cursor = db.get_db().cursor()
@@ -130,7 +132,7 @@ def delete_customer():
         return jsonify({"error": str(e)}), 500
 
 # get all rooms for one hotel
-@front_desk_agent.route('/getRooms', methods=['GET'])
+@front_desk_agent.route('/get_rooms', methods=['GET'])
 def get_rooms():
     cursor = db.get_db().cursor()
     cursor.execute('select roomNum, hotelId, occupancy from Room;')
