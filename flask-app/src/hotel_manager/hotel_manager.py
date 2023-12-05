@@ -8,40 +8,47 @@ hotel_manager = Blueprint('hotel manager', __name__)
 # Get all employee from the DB
 @hotel_manager.route('/employee', methods=['GET'])
 def get_employee():
-    cursor = db.get_db().cursor()
-    cursor.execute('select lastName, firstName, employeeId from Employee;')
-    row_headers = [x[0] for x in cursor.description]
-    json_data = []
-    theData = cursor.fetchall()
-    for row in theData:
-        json_data.append(dict(zip(row_headers, row)))
-    return json_data
+    try:
+        cursor = db.get_db().cursor()
+        cursor.execute('SELECT lastName, firstName, employeeId FROM Employee;')
+        row_headers = [x[0] for x in cursor.description]
+        json_data = []
+        theData = cursor.fetchall()
+        for row in theData:
+            json_data.append(dict(zip(row_headers, row)))
+        return jsonify(json_data)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 # Get all employees and phonenumber
 @hotel_manager.route('/employee_number', methods=['GET'])
 def get_employees_phone_number():
-    cursor = db.get_db().cursor()
-    cursor.execute('select lastName, firstName, employeeId, phoneNumber from Employee;')
-    row_headers = [x[0] for x in cursor.description]
-    json_data = []
-    theData = cursor.fetchall()
-    for row in theData:
-        json_data.append(dict(zip(row_headers, row)))
-    return json_data
+    try:
+        cursor = db.get_db().cursor()
+        cursor.execute('SELECT lastName, firstName, employeeId, phoneNumber FROM Employee;')
+        row_headers = [x[0] for x in cursor.description]
+        json_data = []
+        theData = cursor.fetchall()
+        for row in theData:
+            json_data.append(dict(zip(row_headers, row)))
+        return jsonify(json_data)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 # Delete customer detail for customer with particular userID
 @hotel_manager.route('/delete_employee', methods=['DELETE'])
 def delete_employee():
-    req_data = request.get_json()
-    employee_Id = req_data['employeeId']
-    cursor = db.get_db().cursor()
-    delete_employee_stmt = 'DELETE FROM Employee WHERE employeeId = ' + str(employee_Id)
-    cursor.execute(delete_employee_stmt)
-    # Commit the changes to the database
-    db.get_db().commit()
-    # Return a success message
-    return "Deleted Successfully"
+    try:
+        req_data = request.get_json()
+        employee_Id = req_data['employeeId']
+        cursor = db.get_db().cursor()
+        delete_employee_stmt = 'DELETE FROM Employee WHERE employeeId = %s'
+        cursor.execute(delete_employee_stmt, (employee_Id,))
+        db.get_db().commit()
+        return "Deleted Successfully"
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 # add an employee  
@@ -108,14 +115,17 @@ def delete_customer():
 # get shift 
 @hotel_manager.route('/shift', methods=['GET'])
 def get_shift():
-    cursor = db.get_db().cursor()
-    cursor.execute('select timeOff, dateTimeEnd, employeeId, dateTimeStart from Shift;')
-    row_headers = [x[0] for x in cursor.description]
-    json_data = []
-    theData = cursor.fetchall()
-    for row in theData:
-        json_data.append(dict(zip(row_headers, row)))
-    return json_data
+    try:
+        cursor = db.get_db().cursor()
+        cursor.execute('SELECT timeOff, dateTimeEnd, employeeId, dateTimeStart FROM Shift;')
+        row_headers = [x[0] for x in cursor.description]
+        json_data = []
+        theData = cursor.fetchall()
+        for row in theData:
+            json_data.append(dict(zip(row_headers, row)))
+        return jsonify(json_data)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 
