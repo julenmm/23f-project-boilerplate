@@ -119,8 +119,8 @@ def get_shift():
 
 
 
-# Change employee shift 
-@hotel_manager.route('/change_shift', methods=['POST'])
+# Add employee shift 
+@hotel_manager.route('/add_shift', methods=['POST'])
 def change_employee_shift():
     try:
         data = request.get_json()  # Get JSON data from the request body
