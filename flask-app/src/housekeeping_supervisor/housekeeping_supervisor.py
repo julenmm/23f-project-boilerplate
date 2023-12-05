@@ -10,37 +10,44 @@ housekeeping_supervisor = Blueprint('housekeeping supervisor', __name__)
 # Return a list of all rooms in all hotels and their cleaning status
 @housekeeping_supervisor.route('/rooms_cleaned', methods=['GET'])
 def get_rooms_cleaned():
-    cursor = db.get_db().cursor()
+    try:
+        cursor = db.get_db().cursor()
 
-    # Execute a query to get information about all rooms in all hotels
-    cursor.execute('SELECT roomNum, cleaned, hotelId FROM Room;')
-    row_headers = [x[0] for x in cursor.description]  # Get column headers
-    json_data = []
-    theData = cursor.fetchall()
+        # Execute a query to get information about all rooms in all hotels
+        cursor.execute('SELECT roomNum, cleaned, hotelId FROM Room;')
+        row_headers = [x[0] for x in cursor.description]  # Get column headers
+        json_data = []
+        theData = cursor.fetchall()
 
-    # Creating a JSON response with the fetched data
-    for row in theData:
-        json_data.append(dict(zip(row_headers, row)))
+        # Creating a JSON response with the fetched data
+        for row in theData:
+            json_data.append(dict(zip(row_headers, row)))
 
-    return jsonify(json_data)
+        return jsonify(json_data)
+    except Exception as e:  
+        return jsonify({'error': str(e)}), 500
 
 
 # get all supply units in stock for a hotel
 @housekeeping_supervisor.route('/supplies_in_stock', methods=['GET'])
 def get_supplies():
-    cursor = db.get_db().cursor()
+    try:
+        cursor = db.get_db().cursor()
 
-    # Execute a query to get all supplies from all hotels
-    cursor.execute('SELECT name, unitsInStock, hotelId FROM Supplies;')
-    row_headers = [x[0] for x in cursor.description]  # Get column headers
-    json_data = []
-    theData = cursor.fetchall()
+        # Execute a query to get all supplies from all hotels
+        cursor.execute('SELECT name, unitsInStock, hotelId FROM Supplies;')
+        row_headers = [x[0] for x in cursor.description]  # Get column headers
+        json_data = []
+        theData = cursor.fetchall()
 
-    # Creating a JSON response with the fetched data
-    for row in theData:
-        json_data.append(dict(zip(row_headers, row)))
+        # Creating a JSON response with the fetched data
+        for row in theData:
+            json_data.append(dict(zip(row_headers, row)))
 
-    return jsonify(json_data)
+        return jsonify(json_data)
+    except Exception as e:
+        # Return an error response with a 500 Internal Server Error status
+        return jsonify({'error': str(e)}), 500
 
 
 
@@ -203,23 +210,29 @@ def change_room_cleaned():
 # Get list of housekeeping employees
 @housekeeping_supervisor.route('/get_housekeepers', methods=['GET'])
 def get_housekeepers():
-    cursor = db.get_db().cursor()
-    cursor.execute("SELECT lastName, firstName, employeeId FROM Employee WHERE role = 'Housekeeper';")
-    row_headers = [x[0] for x in cursor.description]
-    json_data = []
-    theData = cursor.fetchall()
-    for row in theData:
-        json_data.append(dict(zip(row_headers, row)))
-    return jsonify(json_data)
+    try:
+        cursor = db.get_db().cursor()
+        cursor.execute("SELECT lastName, firstName, employeeId FROM Employee WHERE role = 'Housekeeper';")
+        row_headers = [x[0] for x in cursor.description]
+        json_data = []
+        theData = cursor.fetchall()
+        for row in theData:
+            json_data.append(dict(zip(row_headers, row)))
+        return jsonify(json_data)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 # Get shift 
 @housekeeping_supervisor.route('/shift', methods=['GET'])
 def get_shift():
-    cursor = db.get_db().cursor()
-    cursor.execute('select timeOff, dateTimeEnd, employeeId, dateTimeStart from Shift;')
-    row_headers = [x[0] for x in cursor.description]
-    json_data = []
-    theData = cursor.fetchall()
-    for row in theData:
-        json_data.append(dict(zip(row_headers, row)))
-    return json_data
+    try:
+        cursor = db.get_db().cursor()
+        cursor.execute('SELECT timeOff, dateTimeEnd, employeeId, dateTimeStart FROM Shift;')
+        row_headers = [x[0] for x in cursor.description]
+        json_data = []
+        theData = cursor.fetchall()
+        for row in theData:
+            json_data.append(dict(zip(row_headers, row)))
+        return jsonify(json_data)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
