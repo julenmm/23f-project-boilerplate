@@ -7,25 +7,23 @@ from datetime import datetime
 housekeeping_supervisor = Blueprint('housekeeping supervisor', __name__)
 
 
-
-# get all rooms for one hotel
+# Return a list of all rooms in all hotels and their cleaning status
 @housekeeping_supervisor.route('/rooms_cleaned', methods=['GET'])
 def get_rooms_cleaned():
-    data = request.get_json()
     cursor = db.get_db().cursor()
-    if not data or 'hotelId' not in data:
-        return jsonify({"error": "Required data not provided"}), 400
 
-     # Extract booking information from request body
-    hotelId= data['hotelId']
-    
-    cursor.execute('select roomNum, cleaned from Room WHERE hotelId = %s;', (hotelId))
-    row_headers = [x[0] for x in cursor.description]
+    # Execute a query to get information about all rooms in all hotels
+    cursor.execute('SELECT roomNum, cleaned, hotelId FROM Room;')
+    row_headers = [x[0] for x in cursor.description]  # Get column headers
     json_data = []
     theData = cursor.fetchall()
+
+    # Creating a JSON response with the fetched data
     for row in theData:
         json_data.append(dict(zip(row_headers, row)))
+
     return jsonify(json_data)
+
 
 # get all supply units in stock for a hotel
 @housekeeping_supervisor.route('/supplies_in_stock', methods=['GET'])
