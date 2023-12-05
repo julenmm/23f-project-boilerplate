@@ -133,7 +133,7 @@ def delete_customer():
 @front_desk_agent.route('/getRooms', methods=['GET'])
 def get_rooms():
     cursor = db.get_db().cursor()
-    cursor.execute('select roomNum, occupancy from Room;')
+    cursor.execute('select roomNum, hotelId from Room;')
     row_headers = [x[0] for x in cursor.description]
     json_data = []
     theData = cursor.fetchall()
