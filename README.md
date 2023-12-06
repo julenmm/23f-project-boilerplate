@@ -15,7 +15,7 @@ This app was created to explore how a relational database could be integrated in
 
 The Homepage
 
-![Homepage](./screenshots/textbook_search.png)
+![Homepage](./screenshots/homepage.png)
 
 Front Fesk Agent
 
