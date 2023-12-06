@@ -10,47 +10,28 @@ Lastly, Housekeeping Supervisors will have the potential to view room, supply, e
 
 This app was created to explore how a relational database could be integrated into an application. We’ve created six web pages that represent the core functionality of the product.
 
-## Screenshots
-
-The Homepage
-
-![Homepage](./screenshots/textbook_listing.png)
-
-Front Fesk Agent
-
-![Front Desk Agent](./screenshots/textbook_listing.png)
-
-The Hotel Manager
-
-=======
 This app was created to explore how a relational database could be integrated into an application. We’ve created six web pages that represent the core functionality of the product.
 
 ## Screenshots
 
 The Homepage
 
-![Homepage](./screenshots/textbook_search.png)
+<img width="1440" alt="homepage" src="https://github.com/julenmm/23f-project-boilerplate/assets/144706960/ce65fc92-2f0e-4b9f-9747-de337e7af777">
+
 
 Front Fesk Agent
 
-![Front Desk Agent](./screenshots/textbook_listing.png)
+<img width="1440" alt="front desk agent" src="https://github.com/julenmm/23f-project-boilerplate/assets/144706960/f3ad7e37-5118-477e-997b-398a4d3eafe6">
+
 
 The Hotel Manager
 
->>>>>>> 40cd6d00a8e0a80717e4596c8ddb53a233f34e24
-![Hotel Manager](./screenshots/rating.png)
-
-The Hotel Manager
-
-![Hotel Manager](./screenshots/manage_listings.png)
+<img width="1440" alt="hotel manager" src="https://github.com/julenmm/23f-project-boilerplate/assets/144706960/9c58b4b6-af8e-4634-a21a-d4a10ab22fe1">
 
 The Housekeeping supervisor
 
-![Housekeeping Supervisor](./screenshots/manage_listings.png)
+<img width="1440" alt="housekeeping supervisor" src="https://github.com/julenmm/23f-project-boilerplate/assets/144706960/a8d28fb9-105f-462b-ab05-caaeba992f59">
 
-The Housekeeping Supervisor
-
-![Housekeeping Supervisor](./screenshots/manage_listings.png)
 
 # Installation
 
