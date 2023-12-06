@@ -135,7 +135,7 @@ def delete_customer():
         db.get_db().rollback()  # Rollback in case of any error
         return jsonify({"error": str(e)}), 500
 
-# get all rooms for one hotel
+# Get all rooms for one hotel
 @front_desk_agent.route('/get_rooms', methods=['GET'])
 def get_rooms():
     try:

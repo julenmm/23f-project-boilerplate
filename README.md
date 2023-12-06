@@ -2,6 +2,7 @@
 
 Lodgistix is a full-stack application for hotel chain management. Lodgistix allows hotel employees to search, add, delete, and change employee information, as well as fetch information for customers and their preferences. The backend consists of a number of RESTful API endpoints implemented using Python and Flask. These endpoints connect to a database using MySQL, a relational database management system. The front end is a web app implemented with Appsmith, a drag-and-drop UI editor.
 
+<<<<<<< HEAD
 Through Lodgistix Front Desk Agents have the ability to add new customers, delete old customers, retrieve customer information, update customer information, and fetch all room information.
 
 Hotel Managers will have the capability to get all customer and employee information, add and delete employee information, as well as get and change employee shifts. 
@@ -22,6 +23,22 @@ Front Fesk Agent
 
 The Hotel Manager
 
+=======
+This app was created to explore how a relational database could be integrated into an application. We’ve created six web pages that represent the core functionality of the product.
+
+## Screenshots
+
+The Homepage
+
+![Homepage](./screenshots/textbook_search.png)
+
+Front Fesk Agent
+
+![Front Desk Agent](./screenshots/textbook_listing.png)
+
+The Hotel Manager
+
+>>>>>>> 40cd6d00a8e0a80717e4596c8ddb53a233f34e24
 ![Hotel Manager](./screenshots/rating.png)
 
 The Hotel Manager

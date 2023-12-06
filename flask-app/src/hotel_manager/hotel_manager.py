@@ -112,7 +112,7 @@ def delete_customer():
         return jsonify({"error": str(e)}), 500
     
 
-# get shift 
+# Get shift for employee
 @hotel_manager.route('/shift', methods=['GET'])
 def get_shift():
     try:
@@ -128,7 +128,7 @@ def get_shift():
         return jsonify({'error': str(e)}), 500
 
 
-
+# Add new shift for the employee
 @hotel_manager.route('/add_shift', methods=['POST'])
 def add_employee_shift():
     try:
