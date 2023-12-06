@@ -36,3 +36,7 @@ For development, Install Python 3 and Flask using pip, the Python package manage
 # Conclusion
 
 Lodgistix is a simple application for managing all hotel resources, implemented using Python, Flask, and MySQL. The application provides RESTful API endpoints for managing employees, customers, and supplies, with the inclusion of error handling and logging for enhanced reliability and troubleshooting. If you have any questions or need further assistance, please refer to the documentation or contact the application administrator.
+
+#Link to Video Demonstration
+
+https://drive.google.com/drive/folders/13X2BxRWfSriuc5oz-UL2sDXurzXocIoT
