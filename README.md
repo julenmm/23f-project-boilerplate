@@ -14,13 +14,10 @@ This app was created to explore how a relational database could be integrated in
 
 ## Screenshots
 
-![The Homepage](./screenshots/homepage.png)
-
-![Front Desk Agent](./screenshots/front_desk_agent.png)
-
-![Hotel Manager](./screenshots/hotel_manager.png)
-
-![Housekeeping Supervisor](./screenshots/housekeeping_supervisor.png)
+<img width="1440" alt="homepage" src="https://github.com/julenmm/23f-project-boilerplate/assets/144706960/25326997-7b34-4e91-852b-c60aa0569a62">
+<img width="1440" alt="front desk agent" src="https://github.com/julenmm/23f-project-boilerplate/assets/144706960/42b60cf4-c9cd-4d5f-a8d5-e4c0aca4c8a4">
+<img width="1440" alt="hotel manager" src="https://github.com/julenmm/23f-project-boilerplate/assets/144706960/2dcd23b1-627d-4a16-863d-1530b847fb17">
+<img width="1440" alt="housekeeping_supervisor" src="https://github.com/julenmm/23f-project-boilerplate/assets/144706960/82caa1f4-e297-4d5e-8d3a-d4641370235e">
 
 # Installation
 
