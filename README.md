@@ -8,7 +8,7 @@ Hotel Managers will have the capability to get all customer and employee informa
 
 Lastly, Housekeeping Supervisors will have the potential to view room, supply, employee, and shift status, as well as add new shifts, update time off requests, and change room status.
 
-This app was created to explore how a relational database could be integrated into an application. We’ve created six web pages that represent the core functionality of the product.
+This app was created to explore how a relational database could be integrated into an application. We’ve created six web pages that represent the core functionality of the product. 
 
 ## Database Diagram
 <img width="725" alt="Screenshot 2023-12-06 at 12 57 00 PM" src="https://github.com/julenmm/23f-project-boilerplate/assets/144706960/10287d88-b562-4e46-a014-676d4b308c6f">
