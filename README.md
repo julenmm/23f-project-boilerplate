@@ -10,7 +10,7 @@ Lastly, Housekeeping Supervisors will have the potential to view room, supply, e
 
 This app was created to explore how a relational database could be integrated into an application. We’ve created six web pages that represent the core functionality of the product.
 
-This app was created to explore how a relational database could be integrated into an application. We’ve created six web pages that represent the core functionality of the product.
+This app was created to explore how a relational database could be integrated into an application. We’ve created web pages that represent the core functionality of the product as shown below.
 
 ## Screenshots
 
