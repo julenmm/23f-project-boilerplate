@@ -19,6 +19,8 @@ This app was created to explore how a relational database could be integrated in
 <img width="1440" alt="front desk agent" src="https://github.com/julenmm/23f-project-boilerplate/assets/144706960/42b60cf4-c9cd-4d5f-a8d5-e4c0aca4c8a4">
 <img width="1440" alt="hotel manager" src="https://github.com/julenmm/23f-project-boilerplate/assets/144706960/2dcd23b1-627d-4a16-863d-1530b847fb17">
 <img width="1440" alt="housekeeping_supervisor" src="https://github.com/julenmm/23f-project-boilerplate/assets/144706960/82caa1f4-e297-4d5e-8d3a-d4641370235e">
+<img width="1440" alt="hotel_manager_shifts" src="https://github.com/julenmm/23f-project-boilerplate/assets/144706960/424edda6-1ab9-46d4-88a6-3a13f416d1dc">
+<img width="1440" alt="fd_agent_hub" src="https://github.com/julenmm/23f-project-boilerplate/assets/144706960/854b629d-d38c-4808-941c-26f5f186128b">
 
 # Installation
 
