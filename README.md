@@ -15,16 +15,16 @@ This app was created to explore how a relational database could be integrated in
 ## Screenshots
 
 The Homepage
-
+![The Homepage](./screenshots/homepage.png)
 
 Front Fesk Agent
-
+![Front Desk Agent](./screenshots/front_desk_agent.png)
 
 The Hotel Manager
-
+![Hotel Manager](./screenshots/hotel_manager.png)
 
 The Housekeeping supervisor
-
+![Housekeeping Supervisor](./screenshots/housekeeping_supervisor.png)
 
 # Installation
 
